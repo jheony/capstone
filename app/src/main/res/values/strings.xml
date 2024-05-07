@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">cap</string>
+    <string name="topbtn">버스 정보"</string>
+    <string name="btn1">정류장 위치 및 경로 안내</string>
+    <string name="btn2">셔틀버스 TIP </string>
+    <string name="btn3" translatable="false">버스 시간표</string>
+    <string name="btn4">버스 출발 시간 알림 서비스</string>
+    <string name="right">   ▷   </string>
+    <string name="left">   ◁   </string>
+</resources>
