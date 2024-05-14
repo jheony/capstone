@@ -22,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        topbtn = (Button) findViewById(R.id.button);
-        btn1 = (Button) findViewById(R.id.button1);
-        btn2 = (Button) findViewById(R.id.button2);
-        btn3 = (Button) findViewById(R.id.button3);
-        btn4 = (Button) findViewById(R.id.button4);
+        topbtn = (Button) findViewById(R.id.button);                //버스 정보로 돌아가기 (배너)
+        btn1 = (Button) findViewById(R.id.button1);                // 정류장위치 경로안내
+        btn2 = (Button) findViewById(R.id.button2);                // 셔틀버스 TIP
+        btn3 = (Button) findViewById(R.id.button3);                //버스 시간표
+        btn4 = (Button) findViewById(R.id.button4);                //버스출발시간알림서비스
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
