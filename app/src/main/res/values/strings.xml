@@ -7,4 +7,7 @@
     <string name="btn4">버스 출발 시간 알림 서비스</string>
     <string name="right">   ▷   </string>
     <string name="left">   ◁   </string>
+    <string name="cancel">취소</string>
+    <string name="complete">완료</string>
+    <string name="write">글 작성</string>
 </resources>
