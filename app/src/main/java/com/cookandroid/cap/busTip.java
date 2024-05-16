@@ -3,6 +3,7 @@ package com.cookandroid.cap;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,15 +24,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class busTip extends AppCompatActivity {
-Button btnCancel, btnComplete;
-final ArrayList<String> midList = new ArrayList<String>();
-final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, midList);
-final EditText editText = (EditText) findViewById(R.id.editItem);
+    private DatabaseReference mPostReference;
 
-DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-DatabaseReference conditionRef = mRootRef.child("text");
+    Button btnCancel, btnComplete;
+    String head, content;
+    EditText edit_head, edit_content;
+    static ArrayList<String> arrayIndex = new ArrayList<String>();
+    static ArrayList<String> arrayData = new ArrayList<String>();
+    ArrayAdapter<String> arrayAdapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,9 +50,6 @@ DatabaseReference conditionRef = mRootRef.child("text");
             return insets;
         });
 
-        ListView list = (ListView) findViewById(R.id.listview_list);
-        list.setAdapter(adapter);
-
         btnCancel = (Button) findViewById(R.id.cancel);
         btnComplete = (Button) findViewById(R.id.complete);
 
@@ -59,35 +60,69 @@ DatabaseReference conditionRef = mRootRef.child("text");
                 startActivity(intent);
             }
         });
-
-
-    }
-        @Override
-        protected void onStart() {
-            super.onStart();
-
-            conditionRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String text = dataSnapshot.getValue(String.class);
-                    midList.add(editText.getText().toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            btnComplete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    conditionRef.setValue(editText.getText().toString());
-                    adapter.notifyDataSetChanged();
-
-                }
-            });
-
+        public void setInsertMode () {
+            edit_head.setText("");
+            edit_content.setText("");
         }
+    }
 
+    public void postFirebaseDatabase(boolean add) {
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> postValues = null;
+        if (add) {
+            FirebasePost post = new FirebasePost(head, content);
+            postValues = post.toMap();
+        }
+        childUpdates.put("/id_list/", postValues);
+        mPostReference.updateChildren(childUpdates);
+    }
+
+    public String setTextLength(String text, int length) {
+        if (text.length() < length) {
+            int gap = length - text.length();
+            for (int i = 0; i < gap; i++) {
+                text = text + " ";
+            }
+        }
+        return text;
+    }
+
+    public void getFirebaseDatabase() {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
+                arrayData.clear();
+                arrayIndex.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String key = postSnapshot.getKey();
+                    FirebasePost get = postSnapshot.getValue(FirebasePost.class);
+                    String[] info = {get.head, get.content};
+                    String Result = setTextLength(info[0], 10) + setTextLength(info[1], 10) + setTextLength(info[2], 10) + setTextLength(info[3], 10);
+                    arrayData.add(Result);
+                    arrayIndex.add(key);
+                    Log.d("getFirebaseDatabase", "key: " + key);
+                    Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]);
+                }
+                arrayAdapter.clear();
+                arrayAdapter.addAll(arrayData);
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());
+            }
+
+            public void onClick(View v) {
+                head = edit_head.getText().toString();
+                content = edit_content.getText().toString();
+                postFirebaseDatabase(true);
+                getFirebaseDatabase();
+                setInsertMode();
+
+            }
+        };
+    }
 }

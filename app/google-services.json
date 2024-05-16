@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "643523207818",
-    "project_id": "capstone-d1df1",
-    "storage_bucket": "capstone-d1df1.appspot.com"
+    "project_number": "118882230491",
+    "project_id": "jarvis-55f22",
+    "storage_bucket": "jarvis-55f22.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:643523207818:android:8dbb239750eb9490c34373",
+        "mobilesdk_app_id": "1:118882230491:android:fb652779ee5c50a8b7ecfe",
         "android_client_info": {
           "package_name": "com.cookandroid.cap"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-MKoAbsVROaQ_8PWcf307emDHzVluA5k"
+          "current_key": "AIzaSyDgcy-WJB_FQHhBkIvPVbsr4YxkTv0TtS4"
         }
       ],
       "services": {
