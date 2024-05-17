@@ -56,73 +56,18 @@ public class busTip extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //글쓰기 취소
                 Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
                 startActivity(intent);
             }
         });
-        public void setInsertMode () {
-            edit_head.setText("");
-            edit_content.setText("");
-        }
-    }
-
-    public void postFirebaseDatabase(boolean add) {
-        mPostReference = FirebaseDatabase.getInstance().getReference();
-        Map<String, Object> childUpdates = new HashMap<>();
-        Map<String, Object> postValues = null;
-        if (add) {
-            FirebasePost post = new FirebasePost(head, content);
-            postValues = post.toMap();
-        }
-        childUpdates.put("/id_list/", postValues);
-        mPostReference.updateChildren(childUpdates);
-    }
-
-    public String setTextLength(String text, int length) {
-        if (text.length() < length) {
-            int gap = length - text.length();
-            for (int i = 0; i < gap; i++) {
-                text = text + " ";
-            }
-        }
-        return text;
-    }
-
-    public void getFirebaseDatabase() {
-        ValueEventListener postListener = new ValueEventListener() {
+        btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
-                arrayData.clear();
-                arrayIndex.clear();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    String key = postSnapshot.getKey();
-                    FirebasePost get = postSnapshot.getValue(FirebasePost.class);
-                    String[] info = {get.head, get.content};
-                    String Result = setTextLength(info[0], 10) + setTextLength(info[1], 10) + setTextLength(info[2], 10) + setTextLength(info[3], 10);
-                    arrayData.add(Result);
-                    arrayIndex.add(key);
-                    Log.d("getFirebaseDatabase", "key: " + key);
-                    Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]);
-                }
-                arrayAdapter.clear();
-                arrayAdapter.addAll(arrayData);
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());
-            }
-
             public void onClick(View v) {
-                head = edit_head.getText().toString();
-                content = edit_content.getText().toString();
-                postFirebaseDatabase(true);
-                getFirebaseDatabase();
-                setInsertMode();
-
+                //글쓰기 완료
             }
-        };
+        });
     }
+
+
 }
